@@ -1,0 +1,25 @@
+[skip] model1_simple_cnn (already finished)
+[start] model2_multitask_cnn: scripts/train.py --model multitask_cnn --run-name model2_multitask_cnn --resume
+[done ] model2_multitask_cnn: exit 0, 41 min
+[skip] model3_mobilenet_v2 (already finished)
+[start] model1_simple_cnn_noaug: scripts/train.py --model simple_cnn --no-aug --run-name model1_simple_cnn_noaug --resume
+[done ] model1_simple_cnn_noaug: exit 0, 78 min
+[start] model2_multitask_cnn_noaug: scripts/train.py --model multitask_cnn --no-aug --run-name model2_multitask_cnn_noaug --resume
+--- restarted 2026-10-04 09:49 ---
+[skip] model1_simple_cnn (already finished)
+[skip] model2_multitask_cnn (already finished)
+[skip] model3_mobilenet_v2 (already finished)
+[skip] model1_simple_cnn_noaug (already finished)
+[skip] model2_multitask_cnn_noaug (already finished)
+[start] model3_mobilenet_v2_noaug: scripts/train.py --model transfer --no-aug --run-name model3_mobilenet_v2_noaug --resume
+[done ] model3_mobilenet_v2_noaug: exit 0, 62 min
+[start] model3_ft_none: scripts/train.py --model transfer --fine-tune-from none --init-from models/model3_mobilenet_v2_stage1.keras --run-name model3_ft_none --resume
+[done ] model3_ft_none: exit 0, 2 min
+[start] model3_ft_block16: scripts/train.py --model transfer --fine-tune-from block_16_expand --init-from models/model3_mobilenet_v2_stage1.keras --run-name model3_ft_block16 --resume
+[done ] model3_ft_block16: exit 0, 72 min
+[start] model3_ft_block10: scripts/train.py --model transfer --fine-tune-from block_10_expand --init-from models/model3_mobilenet_v2_stage1.keras --run-name model3_ft_block10 --resume
+[done ] model3_ft_block10: exit 0, 80 min
+[start] model3_ft_block6: scripts/train.py --model transfer --fine-tune-from block_6_expand --init-from models/model3_mobilenet_v2_stage1.keras --run-name model3_ft_block6 --resume
+[done ] model3_ft_block6: exit 0, 59 min
+[start] model3_ft_all: scripts/train.py --model transfer --fine-tune-from all --init-from models/model3_mobilenet_v2_stage1.keras --run-name model3_ft_all --resume
+[done ] model3_ft_all: exit 0, 101 min

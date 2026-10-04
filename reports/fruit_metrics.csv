@@ -1,0 +1,12 @@
+run,fruit_accuracy,fruit_precision,fruit_recall,fruit_f1
+model3_mobilenet_v2,1.0,1.0,1.0,1.0
+model1_simple_cnn,0.99092,0.99097,0.99117,0.99102
+model2_multitask_cnn,0.98729,0.98727,0.98803,0.98737
+model1_simple_cnn_noaug,0.95642,0.9588,0.95861,0.9578
+model2_multitask_cnn_noaug,0.98865,0.98871,0.98943,0.989
+model3_mobilenet_v2_noaug,0.99591,0.99556,0.99619,0.99584
+model3_ft_none,0.99501,0.99496,0.9948,0.99486
+model3_ft_block16,0.99864,0.99867,0.99851,0.99858
+model3_ft_block10,1.0,1.0,1.0,1.0
+model3_ft_block6,0.99955,0.99946,0.99946,0.99946
+model3_ft_all,1.0,1.0,1.0,1.0

@@ -1,0 +1,17 @@
+class,precision,recall,f1,support
+Banana_fresh,1.0,1.0,1.0,150
+Banana_spoiled,1.0,1.0,1.0,150
+Lemon_fresh,1.0,1.0,1.0,82
+Lemon_spoiled,1.0,1.0,1.0,150
+Lulo_fresh,0.9762,1.0,0.988,82
+Lulo_spoiled,1.0,0.9867,0.9933,150
+Mango_fresh,1.0,1.0,1.0,150
+Mango_spoiled,1.0,1.0,1.0,150
+Orange_fresh,1.0,0.9933,0.9967,150
+Orange_spoiled,0.9934,1.0,0.9967,150
+Strawberry_fresh,1.0,1.0,1.0,150
+Strawberry_spoiled,1.0,1.0,1.0,150
+Tamarillo_fresh,0.9798,0.9898,0.9848,98
+Tamarillo_spoiled,0.9933,0.9867,0.99,150
+Tomato_fresh,1.0,1.0,1.0,150
+Tomato_spoiled,1.0,1.0,1.0,141

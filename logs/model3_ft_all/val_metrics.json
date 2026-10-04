@@ -1,0 +1,16 @@
+{
+  "fruit_accuracy": 1.0,
+  "fruit_precision": 1.0,
+  "fruit_recall": 1.0,
+  "fruit_f1": 1.0,
+  "freshness_accuracy": 0.9995460735360872,
+  "freshness_precision": 0.9991610738255033,
+  "freshness_recall": 1.0,
+  "freshness_f1": 0.9995803608896349,
+  "freshness_macro_f1": 0.9995430227582134,
+  "freshness_auc": 1.0,
+  "joint_accuracy": 0.9995460735360872,
+  "joint_precision": 0.9995860927152318,
+  "joint_recall": 0.9995833333333333,
+  "joint_f1": 0.9995833287036522
+}

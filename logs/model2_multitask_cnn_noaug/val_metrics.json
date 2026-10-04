@@ -1,0 +1,16 @@
+{
+  "fruit_accuracy": 0.9809350885156605,
+  "fruit_precision": 0.9807214072824627,
+  "fruit_recall": 0.9813364290792748,
+  "fruit_f1": 0.9808465487357869,
+  "freshness_accuracy": 0.9954607353608715,
+  "freshness_precision": 0.9933166248955723,
+  "freshness_recall": 0.998320738874895,
+  "freshness_f1": 0.9958123953098827,
+  "freshness_macro_f1": 0.9954284969611852,
+  "freshness_auc": 0.999832405757277,
+  "joint_accuracy": 0.976395823876532,
+  "joint_precision": 0.9752797397270487,
+  "joint_recall": 0.9759338870472942,
+  "joint_f1": 0.9751352143176966
+}

@@ -1,0 +1,32 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791085895.069709   22120 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791085913.152896   22120 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+{
+  "run": "model3_ft_none",
+  "model": "transfer",
+  "augmentation": true,
+  "batch_size": 32,
+  "seed": 42,
+  "limit_per_class": null,
+  "started": "2026-10-04T10:52:17",
+  "init_from": "models/model3_mobilenet_v2_stage1.keras",
+  "fine_tune_from": "none (frozen backbone)",
+  "train_minutes": 0.1,
+  "val_fruit_accuracy": 0.9964,
+  "val_fruit_precision": 0.9965,
+  "val_fruit_recall": 0.9962,
+  "val_fruit_f1": 0.9963,
+  "val_freshness_accuracy": 0.9959,
+  "val_freshness_precision": 0.9992,
+  "val_freshness_recall": 0.9933,
+  "val_freshness_f1": 0.9962,
+  "val_freshness_macro_f1": 0.9959,
+  "val_freshness_auc": 0.9999,
+  "val_joint_accuracy": 0.9923,
+  "val_joint_precision": 0.9918,
+  "val_joint_recall": 0.9926,
+  "val_joint_f1": 0.9922,
+  "params": 2505033
+}

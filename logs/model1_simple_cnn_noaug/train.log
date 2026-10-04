@@ -1,0 +1,88 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791036814.811711   19584 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791036824.468743   19584 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+D:\code\DL Project\.venv\Lib\site-packages\keras\src\trainers\epoch_iterator.py:74: UserWarning: `shuffle=True` was passed, but will be ignored since the data `x` was provided as a tf.data.Dataset. The Dataset is expected to already be shuffled (via `.shuffle(buffer_size)`).
+  self.data_adapter = data_adapters.get_data_adapter(
+Epoch 1/40
+323/323 - 253s - 784ms/step - accuracy: 0.2600 - loss: 2.2186 - val_accuracy: 0.4081 - val_loss: 1.7003 - epoch_time: 252.7724 - learning_rate: 0.0010
+Epoch 2/40
+323/323 - 222s - 688ms/step - accuracy: 0.6112 - loss: 1.1494 - val_accuracy: 0.5801 - val_loss: 1.1085 - epoch_time: 221.6966 - learning_rate: 0.0010
+Epoch 3/40
+323/323 - 226s - 700ms/step - accuracy: 0.7489 - loss: 0.7259 - val_accuracy: 0.7022 - val_loss: 0.8666 - epoch_time: 225.8712 - learning_rate: 0.0010
+Epoch 4/40
+323/323 - 219s - 678ms/step - accuracy: 0.8282 - loss: 0.4914 - val_accuracy: 0.7712 - val_loss: 0.6948 - epoch_time: 218.6432 - learning_rate: 0.0010
+Epoch 5/40
+323/323 - 238s - 736ms/step - accuracy: 0.8768 - loss: 0.3542 - val_accuracy: 0.8202 - val_loss: 0.5592 - epoch_time: 237.4417 - learning_rate: 0.0010
+Epoch 6/40
+323/323 - 220s - 680ms/step - accuracy: 0.9018 - loss: 0.2738 - val_accuracy: 0.8498 - val_loss: 0.5163 - epoch_time: 219.3288 - learning_rate: 0.0010
+Epoch 7/40
+323/323 - 202s - 626ms/step - accuracy: 0.9247 - loss: 0.2173 - val_accuracy: 0.8438 - val_loss: 0.5792 - epoch_time: 202.0476 - learning_rate: 0.0010
+Epoch 8/40
+323/323 - 208s - 643ms/step - accuracy: 0.9368 - loss: 0.1790 - val_accuracy: 0.8793 - val_loss: 0.4197 - epoch_time: 207.2423 - learning_rate: 0.0010
+Epoch 9/40
+323/323 - 198s - 612ms/step - accuracy: 0.9477 - loss: 0.1510 - val_accuracy: 0.8720 - val_loss: 0.4506 - epoch_time: 197.6251 - learning_rate: 0.0010
+Epoch 10/40
+323/323 - 207s - 642ms/step - accuracy: 0.9593 - loss: 0.1269 - val_accuracy: 0.9042 - val_loss: 0.3673 - epoch_time: 206.9740 - learning_rate: 0.0010
+Epoch 11/40
+323/323 - 211s - 654ms/step - accuracy: 0.9615 - loss: 0.1169 - val_accuracy: 0.8793 - val_loss: 0.4278 - epoch_time: 211.3581 - learning_rate: 0.0010
+Epoch 12/40
+323/323 - 205s - 634ms/step - accuracy: 0.9644 - loss: 0.1056 - val_accuracy: 0.8883 - val_loss: 0.4807 - epoch_time: 204.7972 - learning_rate: 0.0010
+Epoch 13/40
+
+Epoch 13: ReduceLROnPlateau reducing learning rate to 0.0003000000142492354.
+323/323 - 202s - 626ms/step - accuracy: 0.9643 - loss: 0.1119 - val_accuracy: 0.8883 - val_loss: 0.3737 - epoch_time: 202.3197 - learning_rate: 0.0010
+Epoch 14/40
+323/323 - 203s - 628ms/step - accuracy: 0.9880 - loss: 0.0440 - val_accuracy: 0.9278 - val_loss: 0.2926 - epoch_time: 202.3408 - learning_rate: 3.0000e-04
+Epoch 15/40
+323/323 - 202s - 624ms/step - accuracy: 0.9913 - loss: 0.0245 - val_accuracy: 0.9310 - val_loss: 0.3302 - epoch_time: 201.5395 - learning_rate: 3.0000e-04
+Epoch 16/40
+323/323 - 202s - 625ms/step - accuracy: 0.9933 - loss: 0.0202 - val_accuracy: 0.9337 - val_loss: 0.3256 - epoch_time: 201.9535 - learning_rate: 3.0000e-04
+Epoch 17/40
+
+Epoch 17: ReduceLROnPlateau reducing learning rate to 9.000000427477062e-05.
+323/323 - 202s - 625ms/step - accuracy: 0.9929 - loss: 0.0206 - val_accuracy: 0.9278 - val_loss: 0.3673 - epoch_time: 201.9720 - learning_rate: 3.0000e-04
+Epoch 18/40
+323/323 - 201s - 623ms/step - accuracy: 0.9949 - loss: 0.0148 - val_accuracy: 0.9378 - val_loss: 0.3419 - epoch_time: 201.1229 - learning_rate: 9.0000e-05
+Epoch 19/40
+323/323 - 201s - 622ms/step - accuracy: 0.9962 - loss: 0.0109 - val_accuracy: 0.9324 - val_loss: 0.3836 - epoch_time: 200.7464 - learning_rate: 9.0000e-05
+Epoch 20/40
+
+Epoch 20: ReduceLROnPlateau reducing learning rate to 2.700000040931627e-05.
+323/323 - 212s - 655ms/step - accuracy: 0.9961 - loss: 0.0107 - val_accuracy: 0.9310 - val_loss: 0.3708 - epoch_time: 211.7169 - learning_rate: 9.0000e-05
+Epoch 21/40
+323/323 - 207s - 640ms/step - accuracy: 0.9973 - loss: 0.0089 - val_accuracy: 0.9360 - val_loss: 0.3523 - epoch_time: 206.7225 - learning_rate: 2.7000e-05
+Epoch 22/40
+323/323 - 202s - 624ms/step - accuracy: 0.9971 - loss: 0.0088 - val_accuracy: 0.9365 - val_loss: 0.3485 - epoch_time: 201.5685 - learning_rate: 2.7000e-05
+Epoch 22: early stopping
+Restoring model weights from the end of the best epoch: 14.
+{
+  "run": "model1_simple_cnn_noaug",
+  "model": "simple_cnn",
+  "augmentation": false,
+  "batch_size": 32,
+  "seed": 42,
+  "limit_per_class": null,
+  "started": "2026-10-03T21:13:55",
+  "learning_rate": 0.001,
+  "max_epochs": 40,
+  "epochs_trained": 22,
+  "best_epoch": 14,
+  "train_minutes": 77.4,
+  "val_fruit_accuracy": 0.9628,
+  "val_fruit_precision": 0.9646,
+  "val_fruit_recall": 0.9651,
+  "val_fruit_f1": 0.9646,
+  "val_freshness_accuracy": 0.9542,
+  "val_freshness_precision": 0.9666,
+  "val_freshness_recall": 0.9479,
+  "val_freshness_f1": 0.9572,
+  "val_freshness_macro_f1": 0.9539,
+  "val_freshness_auc": 0.9906,
+  "val_joint_accuracy": 0.9278,
+  "val_joint_precision": 0.9227,
+  "val_joint_recall": 0.9272,
+  "val_joint_f1": 0.9243,
+  "params": 3751632
+}

@@ -1,0 +1,72 @@
+{
+  "args": {
+    "model": "simple_cnn",
+    "run_name": "model1_simple_cnn_noaug",
+    "no_aug": true,
+    "epochs": null,
+    "stage1_epochs": null,
+    "fine_tune_from": null,
+    "init_from": null,
+    "limit": null,
+    "threads": null,
+    "resume": true
+  },
+  "training_config": {
+    "common": {
+      "image_size": 224,
+      "batch_size": 32,
+      "seed": 42,
+      "monitor": "val_loss",
+      "early_stopping_patience": 8,
+      "reduce_lr_patience": 3,
+      "reduce_lr_factor": 0.3,
+      "min_lr": 1e-06
+    },
+    "augmentation": {
+      "flip": "horizontal_and_vertical",
+      "rotation": 0.1,
+      "zoom": 0.15,
+      "brightness": 0.15,
+      "contrast": 0.15
+    },
+    "models": {
+      "simple_cnn": {
+        "learning_rate": 0.001,
+        "epochs": 40,
+        "build": {
+          "dropout": 0.5
+        }
+      },
+      "multitask_cnn": {
+        "learning_rate": 0.001,
+        "epochs": 40,
+        "loss_weights": {
+          "fruit": 1.0,
+          "freshness": 1.0
+        },
+        "build": {
+          "dropout": 0.3
+        }
+      },
+      "transfer": {
+        "loss_weights": {
+          "fruit": 1.0,
+          "freshness": 1.0
+        },
+        "build": {
+          "backbone": "mobilenet_v2",
+          "dropout": 0.3
+        },
+        "stage1": {
+          "learning_rate": 0.001,
+          "epochs": 12
+        },
+        "stage2": {
+          "learning_rate": 0.0001,
+          "epochs": 25,
+          "fine_tune_from": "block_13_expand"
+        }
+      }
+    }
+  }
+}

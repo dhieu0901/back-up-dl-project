@@ -1,0 +1,97 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791086006.668278   22952 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1791086025.231976   22952 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+D:\code\DL Project\.venv\Lib\site-packages\keras\src\trainers\epoch_iterator.py:74: UserWarning: `shuffle=True` was passed, but will be ignored since the data `x` was provided as a tf.data.Dataset. The Dataset is expected to already be shuffled (via `.shuffle(buffer_size)`).
+  self.data_adapter = data_adapters.get_data_adapter(
+Epoch 1/25
+323/323 - 226s - 699ms/step - freshness_accuracy: 0.9840 - freshness_auc: 0.9983 - freshness_loss: 0.0464 - fruit_accuracy: 0.9921 - fruit_loss: 0.0208 - loss: 0.0673 - val_freshness_accuracy: 0.9909 - val_freshness_auc: 0.9999 - val_freshness_loss: 0.0235 - val_fruit_accuracy: 0.9982 - val_fruit_loss: 0.0064 - val_loss: 0.0297 - epoch_time: 224.9114 - learning_rate: 1.0000e-04
+Epoch 2/25
+323/323 - 164s - 507ms/step - freshness_accuracy: 0.9898 - freshness_auc: 0.9992 - freshness_loss: 0.0284 - fruit_accuracy: 0.9951 - fruit_loss: 0.0155 - loss: 0.0440 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0055 - val_fruit_accuracy: 0.9614 - val_fruit_loss: 0.1266 - val_loss: 0.1324 - epoch_time: 163.8486 - learning_rate: 1.0000e-04
+Epoch 3/25
+323/323 - 180s - 556ms/step - freshness_accuracy: 0.9920 - freshness_auc: 0.9994 - freshness_loss: 0.0222 - fruit_accuracy: 0.9953 - fruit_loss: 0.0139 - loss: 0.0362 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0045 - val_fruit_accuracy: 0.9991 - val_fruit_loss: 0.0034 - val_loss: 0.0079 - epoch_time: 178.7494 - learning_rate: 1.0000e-04
+Epoch 4/25
+323/323 - 186s - 575ms/step - freshness_accuracy: 0.9946 - freshness_auc: 0.9996 - freshness_loss: 0.0147 - fruit_accuracy: 0.9978 - fruit_loss: 0.0087 - loss: 0.0234 - val_freshness_accuracy: 0.9964 - val_freshness_auc: 0.9994 - val_freshness_loss: 0.0153 - val_fruit_accuracy: 0.9977 - val_fruit_loss: 0.0072 - val_loss: 0.0226 - epoch_time: 185.6334 - learning_rate: 1.0000e-04
+Epoch 5/25
+323/323 - 180s - 557ms/step - freshness_accuracy: 0.9955 - freshness_auc: 0.9996 - freshness_loss: 0.0139 - fruit_accuracy: 0.9962 - fruit_loss: 0.0126 - loss: 0.0264 - val_freshness_accuracy: 0.9873 - val_freshness_auc: 0.9983 - val_freshness_loss: 0.0409 - val_fruit_accuracy: 0.9959 - val_fruit_loss: 0.0089 - val_loss: 0.0499 - epoch_time: 179.8987 - learning_rate: 1.0000e-04
+Epoch 6/25
+323/323 - 181s - 559ms/step - freshness_accuracy: 0.9967 - freshness_auc: 0.9997 - freshness_loss: 0.0098 - fruit_accuracy: 0.9970 - fruit_loss: 0.0107 - loss: 0.0205 - val_freshness_accuracy: 0.9982 - val_freshness_auc: 0.9995 - val_freshness_loss: 0.0048 - val_fruit_accuracy: 0.9995 - val_fruit_loss: 0.0019 - val_loss: 0.0067 - epoch_time: 179.8100 - learning_rate: 1.0000e-04
+Epoch 7/25
+323/323 - 179s - 556ms/step - freshness_accuracy: 0.9964 - freshness_auc: 0.9998 - freshness_loss: 0.0104 - fruit_accuracy: 0.9960 - fruit_loss: 0.0132 - loss: 0.0236 - val_freshness_accuracy: 0.9982 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0053 - val_fruit_accuracy: 0.9995 - val_fruit_loss: 0.0044 - val_loss: 0.0098 - epoch_time: 179.4666 - learning_rate: 1.0000e-04
+Epoch 8/25
+323/323 - 180s - 556ms/step - freshness_accuracy: 0.9958 - freshness_auc: 0.9997 - freshness_loss: 0.0112 - fruit_accuracy: 0.9978 - fruit_loss: 0.0058 - loss: 0.0170 - val_freshness_accuracy: 0.9950 - val_freshness_auc: 0.9996 - val_freshness_loss: 0.0114 - val_fruit_accuracy: 0.9968 - val_fruit_loss: 0.0092 - val_loss: 0.0206 - epoch_time: 179.7354 - learning_rate: 1.0000e-04
+Epoch 9/25
+
+Epoch 9: ReduceLROnPlateau reducing learning rate to 2.9999999242136255e-05.
+323/323 - 181s - 560ms/step - freshness_accuracy: 0.9970 - freshness_auc: 0.9998 - freshness_loss: 0.0094 - fruit_accuracy: 0.9983 - fruit_loss: 0.0054 - loss: 0.0148 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0050 - val_fruit_accuracy: 0.9959 - val_fruit_loss: 0.0108 - val_loss: 0.0158 - epoch_time: 180.8287 - learning_rate: 1.0000e-04
+Epoch 10/25
+323/323 - 180s - 558ms/step - freshness_accuracy: 0.9989 - freshness_auc: 1.0000 - freshness_loss: 0.0027 - fruit_accuracy: 0.9993 - fruit_loss: 0.0029 - loss: 0.0056 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0037 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 0.0017 - val_loss: 0.0054 - epoch_time: 179.4902 - learning_rate: 3.0000e-05
+Epoch 11/25
+323/323 - 171s - 528ms/step - freshness_accuracy: 0.9988 - freshness_auc: 1.0000 - freshness_loss: 0.0034 - fruit_accuracy: 0.9994 - fruit_loss: 0.0020 - loss: 0.0054 - val_freshness_accuracy: 0.9973 - val_freshness_auc: 0.9996 - val_freshness_loss: 0.0087 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 8.0354e-04 - val_loss: 0.0096 - epoch_time: 170.5269 - learning_rate: 3.0000e-05
+Epoch 12/25
+323/323 - 170s - 528ms/step - freshness_accuracy: 0.9993 - freshness_auc: 1.0000 - freshness_loss: 0.0024 - fruit_accuracy: 0.9995 - fruit_loss: 0.0017 - loss: 0.0041 - val_freshness_accuracy: 0.9982 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0047 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 0.0012 - val_loss: 0.0059 - epoch_time: 170.4158 - learning_rate: 3.0000e-05
+Epoch 13/25
+
+Epoch 13: ReduceLROnPlateau reducing learning rate to 8.999999772640877e-06.
+323/323 - 165s - 510ms/step - freshness_accuracy: 0.9995 - freshness_auc: 1.0000 - freshness_loss: 0.0017 - fruit_accuracy: 0.9988 - fruit_loss: 0.0037 - loss: 0.0054 - val_freshness_accuracy: 0.9991 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0038 - val_fruit_accuracy: 0.9977 - val_fruit_loss: 0.0058 - val_loss: 0.0096 - epoch_time: 164.8607 - learning_rate: 3.0000e-05
+Epoch 14/25
+323/323 - 159s - 491ms/step - freshness_accuracy: 0.9995 - freshness_auc: 1.0000 - freshness_loss: 0.0017 - fruit_accuracy: 0.9997 - fruit_loss: 0.0018 - loss: 0.0035 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0049 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 0.0012 - val_loss: 0.0061 - epoch_time: 158.5915 - learning_rate: 9.0000e-06
+Epoch 15/25
+323/323 - 158s - 491ms/step - freshness_accuracy: 0.9991 - freshness_auc: 1.0000 - freshness_loss: 0.0022 - fruit_accuracy: 1.0000 - fruit_loss: 5.8623e-04 - loss: 0.0028 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0036 - val_fruit_accuracy: 0.9995 - val_fruit_loss: 0.0012 - val_loss: 0.0047 - epoch_time: 157.6926 - learning_rate: 9.0000e-06
+Epoch 16/25
+323/323 - 159s - 493ms/step - freshness_accuracy: 0.9999 - freshness_auc: 1.0000 - freshness_loss: 6.3079e-04 - fruit_accuracy: 0.9995 - fruit_loss: 0.0014 - loss: 0.0020 - val_freshness_accuracy: 0.9991 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0033 - val_fruit_accuracy: 0.9991 - val_fruit_loss: 0.0022 - val_loss: 0.0055 - epoch_time: 159.2003 - learning_rate: 9.0000e-06
+Epoch 17/25
+323/323 - 159s - 491ms/step - freshness_accuracy: 0.9994 - freshness_auc: 1.0000 - freshness_loss: 0.0015 - fruit_accuracy: 0.9998 - fruit_loss: 8.2047e-04 - loss: 0.0023 - val_freshness_accuracy: 0.9991 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0031 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 6.6753e-04 - val_loss: 0.0038 - epoch_time: 157.8239 - learning_rate: 9.0000e-06
+Epoch 18/25
+323/323 - 157s - 485ms/step - freshness_accuracy: 0.9994 - freshness_auc: 1.0000 - freshness_loss: 0.0017 - fruit_accuracy: 1.0000 - fruit_loss: 4.4504e-04 - loss: 0.0021 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0031 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 5.3522e-04 - val_loss: 0.0036 - epoch_time: 155.8590 - learning_rate: 9.0000e-06
+Epoch 19/25
+323/323 - 168s - 520ms/step - freshness_accuracy: 0.9994 - freshness_auc: 1.0000 - freshness_loss: 0.0018 - fruit_accuracy: 0.9999 - fruit_loss: 4.6615e-04 - loss: 0.0022 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0032 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 3.5905e-04 - val_loss: 0.0035 - epoch_time: 167.1810 - learning_rate: 9.0000e-06
+Epoch 20/25
+323/323 - 169s - 523ms/step - freshness_accuracy: 0.9999 - freshness_auc: 1.0000 - freshness_loss: 6.4505e-04 - fruit_accuracy: 0.9999 - fruit_loss: 3.9596e-04 - loss: 0.0010 - val_freshness_accuracy: 0.9995 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0032 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 2.9475e-04 - val_loss: 0.0035 - epoch_time: 168.1811 - learning_rate: 9.0000e-06
+Epoch 21/25
+323/323 - 164s - 508ms/step - freshness_accuracy: 0.9997 - freshness_auc: 1.0000 - freshness_loss: 9.5587e-04 - fruit_accuracy: 1.0000 - fruit_loss: 2.9494e-04 - loss: 0.0013 - val_freshness_accuracy: 0.9991 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0024 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 4.4913e-04 - val_loss: 0.0029 - epoch_time: 163.1381 - learning_rate: 9.0000e-06
+Epoch 22/25
+323/323 - 151s - 466ms/step - freshness_accuracy: 0.9993 - freshness_auc: 1.0000 - freshness_loss: 0.0018 - fruit_accuracy: 0.9995 - fruit_loss: 0.0016 - loss: 0.0034 - val_freshness_accuracy: 0.9995 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0030 - val_fruit_accuracy: 0.9995 - val_fruit_loss: 7.4530e-04 - val_loss: 0.0038 - epoch_time: 150.6709 - learning_rate: 9.0000e-06
+Epoch 23/25
+323/323 - 149s - 463ms/step - freshness_accuracy: 0.9997 - freshness_auc: 1.0000 - freshness_loss: 8.9194e-04 - fruit_accuracy: 1.0000 - fruit_loss: 3.2334e-04 - loss: 0.0012 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 0.9995 - val_freshness_loss: 0.0041 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 3.6172e-04 - val_loss: 0.0044 - epoch_time: 149.4045 - learning_rate: 9.0000e-06
+Epoch 24/25
+
+Epoch 24: ReduceLROnPlateau reducing learning rate to 2.6999998226528985e-06.
+323/323 - 159s - 493ms/step - freshness_accuracy: 0.9999 - freshness_auc: 1.0000 - freshness_loss: 6.2766e-04 - fruit_accuracy: 0.9999 - fruit_loss: 5.1521e-04 - loss: 0.0011 - val_freshness_accuracy: 0.9995 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0031 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 5.1433e-04 - val_loss: 0.0036 - epoch_time: 159.2398 - learning_rate: 9.0000e-06
+Epoch 25/25
+323/323 - 149s - 462ms/step - freshness_accuracy: 0.9999 - freshness_auc: 1.0000 - freshness_loss: 4.5854e-04 - fruit_accuracy: 0.9995 - fruit_loss: 0.0014 - loss: 0.0019 - val_freshness_accuracy: 0.9986 - val_freshness_auc: 1.0000 - val_freshness_loss: 0.0030 - val_fruit_accuracy: 1.0000 - val_fruit_loss: 3.2291e-04 - val_loss: 0.0033 - epoch_time: 149.1998 - learning_rate: 2.7000e-06
+Restoring model weights from the end of the best epoch: 21.
+{
+  "run": "model3_ft_block16",
+  "model": "transfer",
+  "augmentation": true,
+  "batch_size": 32,
+  "seed": 42,
+  "limit_per_class": null,
+  "started": "2026-10-04T10:54:10",
+  "init_from": "models/model3_mobilenet_v2_stage1.keras",
+  "fine_tune_from": "block_16_expand",
+  "unfrozen_layers": 11,
+  "unfrozen_layers_with_weights": 4,
+  "trainable_params_stage2": 1126089,
+  "stage2_lr": 0.0001,
+  "stage2_epochs": 25,
+  "stage2_best_epoch": 21,
+  "train_minutes": 70.8,
+  "val_fruit_accuracy": 1.0,
+  "val_fruit_precision": 1.0,
+  "val_fruit_recall": 1.0,
+  "val_fruit_f1": 1.0,
+  "val_freshness_accuracy": 0.9991,
+  "val_freshness_precision": 0.9992,
+  "val_freshness_recall": 0.9992,
+  "val_freshness_f1": 0.9992,
+  "val_freshness_macro_f1": 0.9991,
+  "val_freshness_auc": 1.0,
+  "val_joint_accuracy": 0.9991,
+  "val_joint_precision": 0.9988,
+  "val_joint_recall": 0.9988,
+  "val_joint_f1": 0.9988,
+  "params": 2505033
+}
