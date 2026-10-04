@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batch · SGD · Mini-batch — Gradient Descent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Be+Vietnam+Pro:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9EDE6;
+  --paper-hi:#F5F7F2;
+  --ink:#16211A;
+  --ink-2:#56665C;
+  --rule:#C7D0C3;
+  --batch:#175B7C;
+  --sgd:#BF3B23;
+  --mini:#6C4CA0;
+  --accent:var(--ink);
+  --pad: clamp(20px, 4vw, 64px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Be Vietnam Pro","Segoe UI",sans-serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+/* ---------- ambient contour texture ---------- */
+.field{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
+.field svg{width:100%;height:100%}
+.field ellipse{fill:none;stroke:var(--rule);stroke-width:1}
+
+/* ---------- deck ---------- */
+.deck{position:relative;height:100dvh;z-index:1}
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(56px,7vh,84px) var(--pad) clamp(64px,9vh,90px) calc(var(--pad) + 46px);
+  opacity:0;visibility:hidden;
+  transition:opacity .34s ease;
+  overflow-y:auto;
+}
+.slide.is-active{opacity:1;visibility:visible}
+.wrap{width:min(1120px,100%);margin:auto}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:clamp(10px,1.05vw,12px);
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);
+  display:flex;align-items:center;gap:12px;margin:0 0 18px;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule)}
+h1,h2{
+  font-family:"Archivo","Be Vietnam Pro",sans-serif;
+  font-variation-settings:"wdth" 118;
+  font-weight:800;line-height:.98;letter-spacing:-.015em;
+  margin:0;
+}
+h1{font-size:clamp(34px,6.4vw,80px)}
+h2{font-size:clamp(26px,4.1vw,52px)}
+.lede{
+  font-size:clamp(15px,1.55vw,21px);line-height:1.5;color:var(--ink-2);
+  max-width:62ch;margin:20px 0 0;
+}
+p{margin:0 0 14px;line-height:1.55}
+strong{font-weight:600;color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ---------- formula ---------- */
+.formula{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:clamp(13px,1.5vw,19px);
+  background:var(--paper-hi);
+  border-left:3px solid var(--accent);
+  padding:14px 18px;margin:0 0 20px;
+  overflow-x:auto;white-space:nowrap;
+}
+.formula em{font-style:italic;color:var(--accent);font-weight:500}
+
+/* ---------- lists ---------- */
+ul.marks{list-style:none;padding:0;margin:0}
+ul.marks li{
+  position:relative;padding-left:28px;margin-bottom:13px;
+  line-height:1.5;font-size:clamp(14px,1.35vw,17px);
+}
+ul.marks li::before{
+  content:"";position:absolute;left:2px;top:.62em;
+  width:11px;height:1.5px;background:var(--accent);
+}
+ul.marks.num{counter-reset:m}
+ul.marks.num li{counter-increment:m;padding-left:34px}
+ul.marks.num li::before{
+  content:counter(m,decimal-leading-zero);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;
+  width:auto;height:auto;background:none;color:var(--accent);top:.28em;
+}
+
+/* ---------- layout helpers ---------- */
+.cols{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,3.4vw,48px);align-items:start}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)}
+.label{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-2);margin:0 0 10px;
+}
+.pro{color:var(--ink)}
+.con{color:var(--ink)}
+.split{border-top:1px solid var(--rule);padding-top:16px;margin-top:6px}
+
+/* ---------- viz ---------- */
+.viz{position:relative;background:var(--paper-hi);border:1px solid var(--rule)}
+.viz canvas{display:block;width:100%;height:auto}
+.viz .cap{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;
+  color:var(--ink-2);padding:8px 12px;border-top:1px solid var(--rule);
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+
+/* ---------- interactive ---------- */
+.dial{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:20px}
+.dial input[type=range]{
+  -webkit-appearance:none;appearance:none;flex:1;min-width:220px;height:2px;
+  background:var(--rule);outline:none;
+}
+.dial input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--accent);cursor:grab;border:3px solid var(--paper-hi);
+  box-shadow:0 0 0 1px var(--accent);
+}
+.dial input[type=range]::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;background:var(--accent);
+  cursor:grab;border:3px solid var(--paper-hi);box-shadow:0 0 0 1px var(--accent);
+}
+.dial input[type=range]:focus-visible{outline:2px solid var(--ink);outline-offset:6px}
+.readout{
+  font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 112;
+  font-weight:800;font-size:clamp(30px,4vw,46px);line-height:1;color:var(--accent);
+  min-width:2.4ch;text-align:right;
+}
+.readout small{
+  display:block;font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:10px;
+  letter-spacing:.14em;color:var(--ink-2);margin-top:6px;text-transform:uppercase;
+}
+
+/* ---------- table ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:clamp(12px,1.15vw,15px)}
+.tbl th,.tbl td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl thead th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-2);font-weight:500;border-bottom:1.5px solid var(--ink);
+}
+.tbl tbody th{
+  font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 112;font-weight:800;
+  font-size:clamp(13px,1.3vw,17px);white-space:nowrap;
+}
+.tbl tbody tr:nth-child(1) th{color:var(--batch)}
+.tbl tbody tr:nth-child(2) th{color:var(--sgd)}
+.tbl tbody tr:nth-child(3) th{color:var(--mini)}
+.scrollx{overflow-x:auto}
+
+/* ---------- chrome ---------- */
+.rail{
+  position:fixed;left:0;top:0;bottom:0;width:46px;z-index:5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;
+}
+.rail button{
+  all:unset;cursor:pointer;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  color:var(--rule);letter-spacing:.05em;transition:color .2s;
+}
+.rail button:hover{color:var(--ink-2)}
+.rail button[aria-current="true"]{color:var(--ink);font-weight:500}
+.rail button:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+.foot{
+  position:fixed;right:var(--pad);bottom:22px;z-index:5;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--ink-2);
+  display:flex;align-items:center;gap:14px;
+}
+.foot .arrows{display:flex;gap:6px}
+.foot .arrows button{
+  all:unset;cursor:pointer;width:26px;height:26px;border:1px solid var(--rule);
+  display:grid;place-items:center;font-size:12px;color:var(--ink-2);
+}
+.foot .arrows button:hover{border-color:var(--ink);color:var(--ink)}
+.foot .arrows button:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+.brandbar{position:fixed;left:0;top:0;width:46px;height:100%;border-right:1px solid var(--rule);z-index:4}
+
+/* ---------- stagger ---------- */
+.st>*{opacity:0;transform:translateY(14px)}
+.is-active .st>*{animation:rise .55s cubic-bezier(.2,.7,.3,1) forwards}
+.is-active .st>*:nth-child(1){animation-delay:.05s}
+.is-active .st>*:nth-child(2){animation-delay:.12s}
+.is-active .st>*:nth-child(3){animation-delay:.19s}
+.is-active .st>*:nth-child(4){animation-delay:.26s}
+.is-active .st>*:nth-child(5){animation-delay:.33s}
+.is-active .st>*:nth-child(6){animation-delay:.4s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+@media (max-width:860px){
+  .cols,.cols3{grid-template-columns:1fr}
+  .slide{align-items:flex-start;padding-left:calc(var(--pad) + 40px)}
+  .rail{gap:7px}
+  .rail button{font-size:8.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .st>*{opacity:1;transform:none;animation:none!important}
+  .slide{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="field" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <g transform="rotate(-24 980 620)">
+      <ellipse cx="980" cy="620" rx="120" ry="34"/>
+      <ellipse cx="980" cy="620" rx="240" ry="68"/>
+      <ellipse cx="980" cy="620" rx="380" ry="106"/>
+      <ellipse cx="980" cy="620" rx="540" ry="150"/>
+      <ellipse cx="980" cy="620" rx="720" ry="198"/>
+      <ellipse cx="980" cy="620" rx="920" ry="252"/>
+    </g>
+  </svg>
+</div>
+
+<div class="brandbar" aria-hidden="true"></div>
+<nav class="rail" id="rail" aria-label="Điều hướng slide"></nav>
+
+<main class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide is-active" data-title="Mở đầu">
+    <div class="wrap st">
+      <p class="eyebrow">Chương 2.2 · Gradient Descent</p>
+      <h1>Batch,<br>SGD và<br>Mini-batch</h1>
+      <p class="lede">Ba biến thể, cùng một câu hỏi: <strong>mỗi bước đi xuống thung lũng thì nên nhìn bao nhiêu dữ liệu?</strong></p>
+      <p class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--ink-2);margin-top:34px;text-transform:uppercase">
+        Dựa trên slide môn học &nbsp;·&nbsp; Trình bày: Nguyễn Dương Hiếu, Triệu Hải Đăng Trình, Trương Hoàng Tùng.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" data-title="Luật cập nhật">
+    <div class="wrap st">
+      <p class="eyebrow">Nhắc lại</p>
+      <h2>Một bước đi được quyết định thế nào</h2>
+      <div class="cols" style="margin-top:30px">
+        <div>
+          <div class="formula">w ← w − <em>η</em> ∇J(w)</div>
+          <ul class="marks">
+            <li><strong>Dấu</strong> của đạo hàm cho biết đang đứng bên trái hay bên phải đáy → phải đi ngược dấu.</li>
+            <li><strong>Độ lớn</strong> của đạo hàm cho biết còn xa hay đã gần đáy → càng gần, bước càng ngắn.</li>
+            <li><strong>η (learning rate)</strong> quyết định độ dài sải chân: nhỏ thì bò rất lâu, lớn thì vọt qua đáy.</li>
+            <li>Dừng khi <span class="mono">|∇J(w)| &lt; ε</span> hoặc chạm số vòng lặp tối đa.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Câu hỏi còn bỏ ngỏ</p>
+          <p style="font-size:clamp(16px,1.9vw,24px);line-height:1.35;font-weight:300">
+            Công thức nói cho ta biết <em style="font-style:normal;font-weight:600">đi về hướng nào</em>.
+            Nó không nói <em style="font-style:normal;font-weight:600">phải trả bao nhiêu tiền</em> để biết được hướng đó.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" data-title="Chi phí mỗi bước">
+    <div class="wrap st">
+      <p class="eyebrow">Vấn đề</p>
+      <h2>Cái giá của một bước đi</h2>
+      <div class="formula" style="margin-top:26px">∇J(w) = (1/N) · Σ<sub>j=1..N</sub> ∇J<sub>j</sub>(w)</div>
+      <div class="cols">
+        <div>
+          <ul class="marks">
+            <li>Muốn cập nhật <span class="mono">w</span> <strong>một lần</strong>, phải duyệt qua <strong>cả N mẫu</strong> dữ liệu.</li>
+            <li>Với N = 1.000.000 ngôi nhà và 1.000 vòng lặp → <strong>10⁹ lần</strong> tính đạo hàm chỉ để đi 1.000 bước.</li>
+            <li>Dữ liệu không vừa RAM, hoặc dữ liệu chảy về theo luồng → không thể chờ đủ N mẫu rồi mới đi.</li>
+          </ul>
+        </div>
+        <div class="split" style="border-top:none">
+          <p class="label">Ba câu trả lời</p>
+          <ul class="marks">
+            <li><strong style="color:var(--batch)">Batch</strong> — nhìn hết N mẫu rồi mới bước.</li>
+            <li><strong style="color:var(--sgd)">SGD</strong> — nhìn đúng 1 mẫu rồi bước luôn.</li>
+            <li><strong style="color:var(--mini)">Mini-batch</strong> — nhìn một nhúm k mẫu rồi bước.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" data-title="Batch GD" style="--accent:var(--batch)">
+    <div class="wrap st">
+      <p class="eyebrow">Biến thể 1</p>
+      <h2>Batch Gradient Descent</h2>
+      <div class="cols" style="margin-top:28px">
+        <div>
+          <div class="formula">∇J(w) = (1/N) Σ ∇J<sub>j</sub>(w) &nbsp;→&nbsp; w ← w − <em>η</em>∇J(w)</div>
+          <p class="label">Được gì</p>
+          <ul class="marks">
+            <li>Hướng đi là <strong>đạo hàm thật</strong> của hàm mất mát — không lệch một li.</li>
+            <li>Đường đi mượt, hàm mất mát <strong>giảm đơn điệu</strong> qua từng bước (với η đủ nhỏ).</li>
+            <li>Kết quả lặp lại được, dễ debug.</li>
+          </ul>
+          <div class="split">
+            <p class="label">Mất gì</p>
+            <ul class="marks">
+              <li>Mỗi bước tốn <strong>N</strong> phép tính đạo hàm — cực chậm khi N lớn.</li>
+              <li>Phải nạp toàn bộ dữ liệu vào bộ nhớ.</li>
+              <li>Không học online được.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="viz">
+          <canvas data-k="64" width="640" height="560"></canvas>
+          <div class="cap"><span>90 bước · 64/64 mẫu mỗi bước</span><span>đường đi &amp; chi phí</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" data-title="SGD" style="--accent:var(--sgd)">
+    <div class="wrap st">
+      <p class="eyebrow">Biến thể 2</p>
+      <h2>Stochastic Gradient Descent</h2>
+      <div class="cols" style="margin-top:28px">
+        <div>
+          <div class="formula">w ← w − <em>η</em>∇J<sub>j</sub>(w) &nbsp;&nbsp;<span style="color:var(--ink-2)">— j chọn ngẫu nhiên</span></div>
+          <p style="font-size:clamp(14px,1.35vw,17px)">Với hồi quy tuyến tính, đạo hàm tại đúng một mẫu:</p>
+          <div class="formula">∇J<sub>j</sub>(w) = x<sup>(j)</sup> ( x<sup>(j)ᵀ</sup>w − y<sup>(j)</sup> )</div>
+          <p class="label">Được gì</p>
+          <ul class="marks">
+            <li>Một bước rẻ hơn <strong>N lần</strong>. Đi được rất nhiều bước trong cùng khoảng thời gian.</li>
+            <li>Cập nhật ngay khi có mẫu mới → <strong>học online</strong> với dữ liệu dạng luồng.</li>
+            <li>Chỉ cần giữ một mẫu trong bộ nhớ.</li>
+          </ul>
+        </div>
+        <div class="viz">
+          <canvas data-k="1" width="640" height="560"></canvas>
+          <div class="cap"><span>90 bước · 1/64 mẫu mỗi bước</span><span>rẻ hơn 64 lần</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" data-title="Rủi ro SGD" style="--accent:var(--sgd)">
+    <div class="wrap st">
+      <p class="eyebrow">Cái giá phải trả</p>
+      <h2>Nhìn 1 mẫu thì đi loạng choạng</h2>
+      <p class="lede">Đạo hàm trên một mẫu chỉ là <strong>ước lượng nhiễu</strong> của đạo hàm thật. Đúng về trung bình, sai ở từng bước.</p>
+      <div class="cols" style="margin-top:24px">
+        <ul class="marks num">
+          <li><strong>Đường đi zigzag.</strong> Mỗi mẫu kéo <span class="mono">w</span> về phía riêng của nó, nên quỹ đạo giật cục thay vì trôi thẳng xuống đáy.</li>
+          <li><strong>Hàm mất mát không giảm đơn điệu.</strong> Có những bước làm mọi thứ tệ đi — nhìn đường cost sẽ thấy nó nhấp nhô.</li>
+          <li><strong>Tới đáy rồi vẫn không dừng.</strong> Ở gần <span class="mono">w*</span>, đạo hàm thật ≈ 0 nhưng đạo hàm trên 1 mẫu thì không, nên thuật toán lảng vảng trong một vùng nhiễu bán kính tỉ lệ với <span class="mono">η</span>. Muốn hội tụ thật phải <strong>giảm dần η</strong>.</li>
+        </ul>
+        <div>
+          <ul class="marks num" style="counter-reset:m 3">
+            <li><strong>Không tận dụng được phần cứng.</strong> 1 mẫu/bước là phép nhân vector, không phải nhân ma trận — GPU chạy không hết công suất. Nhanh trên lý thuyết, chưa chắc nhanh trên máy.</li>
+          </ul>
+          <div class="split" style="margin-top:20px">
+            <p class="label">Nhưng nhiễu không hoàn toàn xấu</p>
+            <p>Chính những cú giật đó giúp <span class="mono">w</span> nhảy ra khỏi các <strong>local minimum nông</strong> và <strong>điểm yên ngựa</strong> — nơi Batch GD có thể mắc kẹt vĩnh viễn vì đạo hàm bằng 0.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" data-title="Mini-batch" style="--accent:var(--mini)">
+    <div class="wrap st">
+      <p class="eyebrow">Biến thể 3</p>
+      <h2>Mini-batch Gradient Descent</h2>
+      <div class="cols" style="margin-top:28px">
+        <div>
+          <div class="formula">∇J<sub>B</sub>(w) = (1/|B|) Σ<sub>(x,y)∈B</sub> ∇J<sub>xy</sub>(w) &nbsp;→&nbsp; w ← w − <em>η</em>∇J<sub>B</sub>(w)</div>
+          <ul class="marks">
+            <li>Đầu mỗi epoch: <strong>xáo trộn</strong> dữ liệu rồi chia thành các nhóm k mẫu.</li>
+            <li>Nhiễu của đạo hàm giảm theo <strong>~1/√k</strong> — chỉ cần k = 32 đã êm hơn SGD gần 6 lần.</li>
+            <li>k mẫu xếp thành ma trận → <strong>vector hóa</strong>, đúng thứ GPU thích.</li>
+            <li>Thực tế thường chọn <strong class="mono">k = 16 … 256</strong>.</li>
+          </ul>
+          <div class="split">
+            <p>Đây là lý do gần như mọi thư viện học sâu mặc định dùng mini-batch — và vẫn gọi nó là "SGD".</p>
+          </div>
+        </div>
+        <div class="viz">
+          <canvas data-k="8" width="640" height="560"></canvas>
+          <div class="cap"><span>90 bước · 8/64 mẫu mỗi bước</span><span>rẻ gấp 8 · êm hơn nhiều</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" data-title="Thử batch size">
+    <div class="wrap st">
+      <p class="eyebrow">Thử trực tiếp</p>
+      <h2>Kéo batch size, xem đường đi thẳng dần</h2>
+      <div class="cols" style="margin-top:26px;grid-template-columns:1fr 1fr">
+        <div class="viz">
+          <canvas id="liveCanvas" width="640" height="560"></canvas>
+          <div class="cap"><span id="liveCap">8/64 mẫu mỗi bước</span><span id="liveCost">tổng: 720 lượt đọc mẫu</span></div>
+        </div>
+        <div>
+          <p>Cùng một bài toán, cùng <span class="mono">η</span>, cùng <strong>90 bước cập nhật</strong>. Thứ duy nhất thay đổi là số mẫu dùng để tính mỗi bước.</p>
+          <div class="dial">
+            <div class="readout"><span id="kOut">8</span><small>mẫu / bước</small></div>
+            <input id="kSlider" type="range" min="1" max="64" value="8" step="1" aria-label="Số mẫu mỗi bước">
+          </div>
+          <div class="split" style="margin-top:26px">
+            <ul class="marks">
+              <li><strong class="mono">k = 1</strong> → đường zigzag, cost nhấp nhô, quẩn quanh đáy mà không đứng yên.</li>
+              <li><strong class="mono">k = 64</strong> → đường mượt, cost giảm đều, nhưng mỗi bước đắt gấp 64 lần.</li>
+              <li>Ở giữa là chỗ <strong>đủ thẳng mà vẫn đủ rẻ</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide" data-title="So sánh">
+    <div class="wrap st">
+      <p class="eyebrow">Tổng kết</p>
+      <h2>Ba phương pháp cạnh nhau</h2>
+      <div class="scrollx" style="margin-top:26px">
+        <table class="tbl">
+          <thead>
+            <tr><th>Phương pháp</th><th>Mẫu / bước</th><th>Chi phí 1 bước</th><th>Nhiễu</th><th>Đường đi</th><th>Hội tụ</th><th>Dùng khi</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Batch</th>
+              <td>N</td><td>Cao</td><td>Không</td><td>Mượt, thẳng</td>
+              <td>Ổn định, tới đúng đáy</td><td>N nhỏ, cần kết quả chính xác</td>
+            </tr>
+            <tr>
+              <th>SGD</th>
+              <td>1</td><td>Rất thấp</td><td>Rất cao</td><td>Zigzag</td>
+              <td>Dao động quanh đáy, cần giảm η</td><td>Dữ liệu luồng, học online</td>
+            </tr>
+            <tr>
+              <th>Mini-batch</th>
+              <td>k (16–256)</td><td>Thấp</td><td>Vừa (~1/√k)</td><td>Hơi rung, vẫn thẳng</td>
+              <td>Nhanh và đủ ổn định</td><td>Mặc định cho hầu hết bài toán</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:26px;color:var(--ink-2)">Cả ba dùng <strong>chung một công thức cập nhật</strong>. Khác nhau duy nhất ở tập mẫu dùng để ước lượng ∇J(w).</p>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide" data-title="Kết luận">
+    <div class="wrap st">
+      <p class="eyebrow">Chốt lại</p>
+      <h2 style="max-width:16ch">Batch đi đúng. SGD đi nhanh. Mini-batch đi được.</h2>
+      <div class="cols" style="margin-top:34px">
+        <ul class="marks">
+          <li>Mặc định chọn <strong>mini-batch</strong>, coi <span class="mono">k</span> là một siêu tham số cân bằng nhiễu và tốc độ.</li>
+          <li><strong>Xáo trộn dữ liệu</strong> đầu mỗi epoch — nếu không, thứ tự mẫu sẽ tạo ra thiên lệch có hệ thống.</li>
+          <li><strong>Giảm dần η</strong> theo thời gian để thoát khỏi vùng dao động quanh đáy.</li>
+          <li>Nhiễu là con dao hai lưỡi: gây loạng choạng, nhưng cũng cứu ta khỏi local minimum nông.</li>
+        </ul>
+        <div>
+          <p class="label">Câu hỏi mở cho phần sau</p>
+          <p style="font-size:clamp(15px,1.7vw,21px);line-height:1.4">Nếu η cố định là chưa đủ, có cách nào để thuật toán <strong>tự điều chỉnh sải chân</strong> theo từng hướng? → Momentum, RMSProp, Adam.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="foot">
+  <span id="counter">01 / 10</span>
+  <span class="arrows">
+    <button id="prev" aria-label="Slide trước">←</button>
+    <button id="next" aria-label="Slide sau">→</button>
+  </span>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ dữ liệu hồi quy tuyến tính giả lập ============ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+var N=64, rnd=mulberry32(11), T=new Float64Array(N), Y=new Float64Array(N), i;
+for(i=0;i<N;i++){var t=0.2+1.4*rnd(); T[i]=t; Y[i]=0.5+1.0*t+(rnd()*2-1)*0.30;}
+var s1=0,s2=0,my=0,mty=0;
+for(i=0;i<N;i++){s1+=T[i];s2+=T[i]*T[i];my+=Y[i];mty+=T[i]*Y[i];}
+s1/=N;s2/=N;my/=N;mty/=N;
+var det=s2-s1*s1;
+var W0=(s2*my-s1*mty)/det, W1=(mty-s1*my)/det;      // nghiệm tối ưu
+function cost(a,b){var s=0;for(var j=0;j<N;j++){var r=a+b*T[j]-Y[j];s+=r*r;}return 0.5*s/N;}
+var FMIN=cost(W0,W1);
+
+/* Hessian H = [[1,s1],[s1,s2]] -> trục ellipse */
+var tr=1+s2, dt=s2-s1*s1, disc=Math.sqrt(Math.max(tr*tr-4*dt,0));
+var l1=(tr+disc)/2, l2=(tr-disc)/2;
+var v1=[s1, l1-1], n1=Math.hypot(v1[0],v1[1]); v1=[v1[0]/n1, v1[1]/n1];
+var v2=[-v1[1], v1[0]];
+var ANG=Math.atan2(v1[1],v1[0]);
+
+var START=[W0+1.95*v2[0]+0.45*v1[0], W0*0+W1+1.95*v2[1]+0.45*v1[1]];
+if(START[1]<W1){START=[W0-1.95*v2[0]+0.45*v1[0], W1-1.95*v2[1]+0.45*v1[1]];}
+var ETA=0.45, STEPS=90;
+var LMAX=cost(START[0],START[1])-FMIN;
+
+/* view (đơn vị/pixel bằng nhau 2 chiều) */
+var cx=(START[0]+W0)/2, cy=(START[1]+W1)/2;
+var half=Math.max(Math.abs(START[0]-W0),Math.abs(START[1]-W1))/2+0.75;
+
+function shuffle(arr,r){for(var k=arr.length-1;k>0;k--){var j=Math.floor(r()*(k+1));var tmp=arr[k];arr[k]=arr[j];arr[j]=tmp;}}
+
+var cache={};
+function run(k){
+  if(cache[k])return cache[k];
+  var r=mulberry32(2024+k), idx=[],p=N;
+  for(var q=0;q<N;q++)idx.push(q);
+  var a=START[0], b=START[1];
+  var path=[[a,b]], costs=[cost(a,b)];
+  for(var s=0;s<STEPS;s++){
+    if(p+k>N){shuffle(idx,r);p=0;}
+    var g0=0,g1=0;
+    for(var m=0;m<k;m++){var j=idx[p+m];var res=a+b*T[j]-Y[j];g0+=res;g1+=res*T[j];}
+    p+=k;
+    a-=ETA*g0/k; b-=ETA*g1/k;
+    path.push([a,b]); costs.push(cost(a,b));
+  }
+  cache[k]={path:path,costs:costs};
+  return cache[k];
+}
+
+/* ============ vẽ ============ */
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function Viz(canvas,k){
+  this.c=canvas; this.k=k; this.i=0; this.hold=0;
+  this.resize();
+}
+Viz.prototype.resize=function(){
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  var w=this.c.clientWidth||640;
+  var h=Math.round(w*560/640);
+  this.w=w; this.h=h;
+  this.c.width=Math.round(w*dpr); this.c.height=Math.round(h*dpr);
+  this.c.style.height=h+'px';
+  this.ctx=this.c.getContext('2d');
+  this.ctx.setTransform(dpr,0,0,dpr,0,0);
+  this.draw();
+};
+Viz.prototype.setK=function(k){this.k=k;this.i=reduce?STEPS:0;this.hold=0;this.draw();};
+Viz.prototype.tick=function(){
+  if(this.hold>0){this.hold--;if(this.hold===0)this.i=0;else return;}
+  if(this.i<STEPS){this.i++;}
+  else{this.hold=55;}
+  this.draw();
+};
+Viz.prototype.px=function(p){
+  var pad=14, size=Math.min(this.w,this.h*0.74)-pad*2;
+  var ox=(this.w-size)/2, oy=pad;
+  return [ox+((p[0]-cx)/(2*half))*size+size/2, oy+size/2-((p[1]-cy)/(2*half))*size];
+};
+Viz.prototype.scale=function(){
+  var pad=14; return (Math.min(this.w,this.h*0.74)-pad*2)/(2*half);
+};
+Viz.prototype.draw=function(){
+  var ctx=this.ctx; if(!ctx)return;
+  var css=getComputedStyle(this.c);
+  var accent=css.getPropertyValue('--accent').trim()||'#16211A';
+  var rule=css.getPropertyValue('--rule').trim()||'#C7D0C3';
+  var ink2=css.getPropertyValue('--ink-2').trim()||'#56665C';
+  var ink=css.getPropertyValue('--ink').trim()||'#16211A';
+  ctx.clearRect(0,0,this.w,this.h);
+
+  var s=this.scale(), o=this.px([W0,W1]);
+
+  /* contour */
+  ctx.strokeStyle=rule; ctx.lineWidth=1;
+  for(var n=1;n<=7;n++){
+    var L=LMAX*Math.pow(n/5.2,2);
+    var ra=Math.sqrt(2*L/l2)*s, rb=Math.sqrt(2*L/l1)*s;
+    ctx.beginPath();
+    ctx.ellipse(o[0],o[1],ra,rb,-ANG+Math.PI/2,0,Math.PI*2);
+    ctx.stroke();
+  }
+  /* đáy */
+  ctx.fillStyle=ink;
+  ctx.beginPath(); ctx.arc(o[0],o[1],3.2,0,Math.PI*2); ctx.fill();
+  ctx.font='500 10px "IBM Plex Mono", monospace'; ctx.fillStyle=ink2;
+  ctx.fillText('w*',o[0]+8,o[1]+4);
+
+  var d=run(this.k), lim=Math.max(this.i,1);
+
+  /* quỹ đạo */
+  ctx.strokeStyle=accent; ctx.lineWidth=1.6; ctx.lineJoin='round';
+  ctx.beginPath();
+  for(var t2=0;t2<=lim;t2++){var q=this.px(d.path[t2]); if(t2===0)ctx.moveTo(q[0],q[1]); else ctx.lineTo(q[0],q[1]);}
+  ctx.stroke();
+  ctx.fillStyle=accent;
+  for(var t3=0;t3<=lim;t3++){var q2=this.px(d.path[t3]); ctx.globalAlpha=.55; ctx.beginPath(); ctx.arc(q2[0],q2[1],1.7,0,Math.PI*2); ctx.fill();}
+  ctx.globalAlpha=1;
+  var head=this.px(d.path[lim]);
+  ctx.beginPath(); ctx.arc(head[0],head[1],4.6,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#F5F7F2'; ctx.lineWidth=1.4; ctx.stroke();
+
+  /* điểm xuất phát */
+  var st=this.px(d.path[0]);
+  ctx.strokeStyle=ink2; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(st[0],st[1],4,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle=ink2; ctx.fillText('w₀',st[0]+8,st[1]-6);
+
+  /* dải chi phí */
+  var top=this.h*0.79, bot=this.h-26, left=18, right=this.w-18;
+  ctx.strokeStyle=rule; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(left,bot+0.5); ctx.lineTo(right,bot+0.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(left,top-0.5); ctx.lineTo(right,top-0.5); ctx.stroke();
+  var hi=Math.log10(LMAX), lo=-4.2;
+  ctx.strokeStyle=accent; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  for(var t4=0;t4<=lim;t4++){
+    var v=Math.log10(Math.max(d.costs[t4]-FMIN,1e-7));
+    var yy=top+(hi-v)/(hi-lo)*(bot-top);
+    yy=Math.max(top,Math.min(bot,yy));
+    var xx=left+(t4/STEPS)*(right-left);
+    if(t4===0)ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  ctx.fillStyle=ink2; ctx.font='400 9.5px "IBM Plex Mono", monospace';
+  ctx.fillText('J(w) − J(w*)  ·  thang log',left,this.h-9);
+  ctx.textAlign='right';
+  ctx.fillText('bước cập nhật →',right,this.h-9);
+  ctx.textAlign='left';
+};
+
+var vizzes=[];
+Array.prototype.forEach.call(document.querySelectorAll('canvas[data-k]'),function(c){
+  vizzes.push(new Viz(c,parseInt(c.getAttribute('data-k'),10)));
+});
+var live=new Viz(document.getElementById('liveCanvas'),8);
+vizzes.push(live);
+
+/* slider */
+var slider=document.getElementById('kSlider'), kOut=document.getElementById('kOut'),
+    liveCap=document.getElementById('liveCap'), liveCost=document.getElementById('liveCost');
+function syncLive(){
+  var k=parseInt(slider.value,10);
+  kOut.textContent=k;
+  liveCap.textContent=k+'/64 mẫu mỗi bước';
+  liveCost.textContent='tổng: '+(k*STEPS).toLocaleString('vi-VN')+' lượt đọc mẫu';
+  live.setK(k);
+}
+slider.addEventListener('input',syncLive);
+syncLive();
+
+/* ============ điều hướng ============ */
+var slides=Array.prototype.slice.call(document.querySelectorAll('.slide'));
+var rail=document.getElementById('rail'), counter=document.getElementById('counter');
+var cur=0;
+slides.forEach(function(s,idx){
+  var b=document.createElement('button');
+  b.textContent=String(idx+1).padStart(2,'0');
+  b.title=s.getAttribute('data-title')||'';
+  b.addEventListener('click',function(){go(idx);});
+  rail.appendChild(b);
+});
+var dots=Array.prototype.slice.call(rail.children);
+
+function go(n){
+  n=Math.max(0,Math.min(slides.length-1,n));
+  slides[cur].classList.remove('is-active');
+  cur=n;
+  slides[cur].classList.add('is-active');
+  dots.forEach(function(d,idx){d.setAttribute('aria-current',idx===cur?'true':'false');});
+  counter.textContent=String(cur+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  slides[cur].scrollTop=0;
+  activeViz().forEach(function(v){v.resize(); if(!reduce){v.i=0;v.hold=0;} else {v.i=STEPS;} v.draw();});
+}
+function activeViz(){
+  return vizzes.filter(function(v){return slides[cur].contains(v.c);});
+}
+document.addEventListener('keydown',function(e){
+  if(e.target===slider)return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  else if(e.key==='Home'){go(0);}
+  else if(e.key==='End'){go(slides.length-1);}
+});
+document.getElementById('next').addEventListener('click',function(){go(cur+1);});
+document.getElementById('prev').addEventListener('click',function(){go(cur-1);});
+
+var tx=null;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(tx===null)return;
+  var dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>60){go(cur+(dx<0?1:-1));}
+  tx=null;
+},{passive:true});
+
+window.addEventListener('resize',function(){vizzes.forEach(function(v){v.resize();});});
+
+/* vòng lặp hoạt hình */
+var last=0;
+function loop(ts){
+  if(!reduce && ts-last>42){
+    last=ts;
+    activeViz().forEach(function(v){v.tick();});
+  }
+  requestAnimationFrame(loop);
+}
+go(0);
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
